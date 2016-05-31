@@ -33,4 +33,3 @@ void Position::setYaw(double yaw){
 
 Position::~Position() {
 }
-

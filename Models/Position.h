@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Position.h
  *
  *  Created on: May 28, 2016
@@ -28,7 +28,5 @@ public:
 	inline unsigned getYaw() {
 		return m_Yaw;
 	};
-
-
 
 };
