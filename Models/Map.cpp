@@ -18,8 +18,6 @@ Map::Map(unsigned Cols, unsigned Rows) {
 }
 
 void Map::initMap(const char* filename) {
-    unsigned x, y, bX, bY;
-    
     // Get the config
     ConfigurationManager* config = new ConfigurationManager(filename);
     
@@ -89,48 +87,50 @@ void Map::initMap(const char* filename) {
     
 }
 
+int Map::checkCellOccupation(std::vector<unsigned char> PngMap, int nRow, int nCol){
+    nRow *= GridCellSizeInPx;
+    nCol *= GridCellSizeInPx;
+    int nFreeCellsCount = 0;
+    
+    for (unsigned int currRow = 0; currRow < GridCellSizeInPx; currRow++){
+        for (unsigned int currCol = 0; currCol < GridCellSizeInPx; currCol++){
+            if (PngMap[((nRow + currRow) * width * 4) + ((nCol + currCol) * 4)] == 255){
+                nFreeCellsCount++;
+            }
+        }
+    }
+    
+    if (nFreeCellsCount < 16){
+        return 1;
+    }
+    else{
+        return 0;
+    }
+}
+
 std::vector< std::vector<unsigned char> > Map::CreatGridFromMap(std::vector<unsigned char> PngMap,
                                                                 unsigned MapHeight, unsigned MapWidth, float GridResolutionCm,
                                                                 float PixelPerCm, unsigned& GridCols, unsigned& GridRows) {
     
     // Calc grid size
-    unsigned GridCellSizeInPx = ceil(GridResolutionCm / PixelPerCm);
+    GridCellSizeInPx = ceil(GridResolutionCm / PixelPerCm);
     GridCols = ceil(MapWidth * PixelPerCm / GridResolutionCm);
     GridRows = ceil(MapHeight * PixelPerCm / GridResolutionCm);
     
-    RegGrid.resize(GridCols);
+    vector< vector<unsigned char> > tempGrid;
+    tempGrid.resize(GridCols);
     
-    for (int i = 0; i < GridCols; i++){
-        RegGrid[i].resize(GridRows);
+    for (unsigned int i = 0; i < GridCols; i++){
+        tempGrid[i].resize(GridRows);
     }
+    
     for (unsigned i = 0; i < GridCols; ++i) {
         for (unsigned j = 0; j < GridRows; ++j) {
-            
-            // defind white px counter
-            unsigned PxWhiteConuter = 0;
-            
-            // find out from the png if cell is black or white
-            for (unsigned pI = 0; pI < GridCellSizeInPx; ++pI) {
-                for (unsigned pJ = 0; pJ < GridCellSizeInPx; ++pJ) {
-                    PxWhiteConuter += PngMap[(i * GridCellSizeInPx * MapWidth
-                                              + pI) * 4 + (j * GridCellSizeInPx + pJ) * 4];
-                }
-            }
-            
-            // Chack for number of black cell TODO:think if i need a parameter for Negligible number of blac px
-            if (PxWhiteConuter == (GridCellSizeInPx * GridCellSizeInPx)) {
-                // white
-                RegGrid[i][j] = 1;
-            } else {
-                // Black
-                RegGrid[i][j] = 0;
-            }
-            
+            tempGrid[i][j] = this->checkCellOccupation(PngMap, i, j);
         }
-        
     }
     
-    return RegGrid;
+    return tempGrid;
     
 }
 Map::~Map() {
