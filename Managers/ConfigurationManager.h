@@ -1,36 +1,43 @@
 /*
- * ConfigurationManager.h
+ * Config.h
  *
  *  Created on: May 28, 2016
  *      Author: colman
  */
 
 #include <string>
-#include <iostream>
-using namespace std;
+#include <vector>
 #include "../Models/Position.h"
 #include "../Models/Size.h"
+using namespace std;
 
+/*
+   ConfigurationManager
+   Parses and represents a config file
+ */
 namespace Managers{
-	class ConfigurationManager {
+class ConfigurationManager {
 	public:
-		virtual ~ConfigurationManager();
-		static ConfigurationManager* GetInstance();
-		void LoadFromFile(string filePath);
-		string getPngMapPath();
+		/* Parse the given file
+		 */
+		ConfigurationManager(string fileName);
+
+		~ConfigurationManager();
+
+		void parse(string fileName);
+
+		string getMapPath();
 		Position getStartPosition();
-		Position getEndPosition();
-		float getPixelPerCm();
-		float getPngGridResolution();
+		Point getGoal();
 		Size getRobotSize();
-	private:
-		ConfigurationManager();
-		static ConfigurationManager * m_ConfigurationManagerInstance;
-		string m_PngMapPath;
-		float m_PpCM;
-		float m_PngGridResolution;
-		Position m_StartPosition;
-		Position m_EndPosition;
-		Size m_RobotSize;
-	};
+		double getPixelPerCm();
+		double getPngGridResolution();
+
+		string mapLocation;
+		Position startPosition;
+		Point goal;
+		Size robotSize;
+		double mapResolutionCm;
+		double gridResolutionCm;
+};
 }
