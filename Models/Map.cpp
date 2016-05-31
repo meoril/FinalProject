@@ -12,11 +12,6 @@ Map::Map(const char* filename) {
     initMap(filename);
 }
 
-Map::Map(unsigned Cols, unsigned Rows) {
-    this->m_Cols = Cols;
-    this->m_Rows = Rows;
-}
-
 void Map::initMap(const char* filename) {
     // Get the config
     ConfigurationManager* config = new ConfigurationManager(filename);
@@ -38,7 +33,6 @@ void Map::initMap(const char* filename) {
                              config->getRobotSize().RadiosSize()
                              / config->getPngGridResolution());
     
-    cout <<RegImage.size();
     // Paint the new map image in white
     for(unsigned int i = 0; i < RegImage.size(); i++)
     {
@@ -101,9 +95,11 @@ int Map::checkCellOccupation(std::vector<unsigned char> PngMap, int nRow, int nC
     }
     
     if (nFreeCellsCount < 16){
+        // Occupied cell
         return 1;
     }
     else{
+        // Free cell
         return 0;
     }
 }

@@ -5,8 +5,7 @@
 //============================================================================
 
 #include <iostream>
-#include "Utils/Config.h"
-#include "Models/Map.h"
+#include "Facade.h"
 using namespace std;
 
 int main() {
