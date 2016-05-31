@@ -10,6 +10,7 @@
 using namespace std;
 
 int main() {
-	Map* check = new Map("../Resources/roboticsLabMap.png");
-	return 0;
+    Facade* runner = new Facade();
+    runner->Run();
+    return 0;
 }
