@@ -18,6 +18,7 @@ public:
     Facade();
     virtual ~Facade();
     void Run();
+    std::list<Node*> lstClearWaypointToDestination;
 private:
     Map* myMap;
     ConfigurationManager* myConfig;
