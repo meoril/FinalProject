@@ -176,7 +176,7 @@ std::list<Node*> PathPlanner::AStarClearListByPrev(std::list<Node*> lstAll)
     return (lstToRet);
 }
 
-std::list<Node*> PathPlanner::AStarClearList(std::list<Node*> lstAll, int DestX, int DestY)
+std::list<Node*> PathPlanner::AStarClearList(std::list<Node*> lstAll, Point goalPoint)
 {
     std::list<Node*> lstToRet;
     std::list<Node*>::iterator curr = lstAll.begin();
@@ -189,7 +189,7 @@ std::list<Node*> PathPlanner::AStarClearList(std::list<Node*> lstAll, int DestX,
     double dCurrDiff;
     double dAVGDiffSum = 0;
     
-    while (!(((*curr)->getX() == DestX) && ((*curr)->getY() == DestY)))
+    while (!(((*curr)->getX() == goalPoint.getX()) && ((*curr)->getY() == goalPoint.getY())))
     {
         dCurrDiff = BaseUtils::DegreeBetweenPoints(toComp->getX(), toComp->getY(), (*curr)->getX(),(*curr)->getY());
         dAVGDiffSum += dCurrDiff;
