@@ -8,13 +8,11 @@
 #include "Map.h"
 using namespace std;
 
-Map::Map(const char* filename) {
-    initMap(filename);
+Map::Map(ConfigurationManager* config) {
+    initMap(config);
 }
 
-void Map::initMap(const char* filename) {
-    // Get the config
-    ConfigurationManager* config = new ConfigurationManager(filename);
+void Map::initMap(ConfigurationManager* config) {
     
     //decode
     unsigned error = lodepng::decode(RegImage, width, height,

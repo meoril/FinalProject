@@ -8,12 +8,13 @@
 #include "Facade.h"
 
 Facade::Facade() {
-	myMap = new Map("Resources/roboticsLabMap.png");
+    config = new ConfigurationManager("Resources/Parameters.txt");
+    myMap = new Map(config);
 }
 
 Facade::~Facade() {
 }
 
 void Facade::Run(){
-
+    
 }
