@@ -129,6 +129,11 @@ std::vector< std::vector<unsigned char> > Map::CreatGridFromMap(std::vector<unsi
     return tempGrid;
     
 }
+
+bool Map::isPointOccupied(Point* pPoint){
+    return !this->FatGrid[pPoint->getX()][pPoint->getY()];
+}
+
 Map::~Map() {
 }
 
