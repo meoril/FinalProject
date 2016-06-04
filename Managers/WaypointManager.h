@@ -7,6 +7,8 @@
 
 #ifndef WAYPOINTMANAGER_H_
 #define WAYPOINTMANAGER_H_
+#include "../Models/Node.h"
+#include "../Models/Robot.h"
 
 namespace Managers {
 
@@ -14,8 +16,17 @@ class WaypointManager {
 public:
 	WaypointManager();
 	virtual ~WaypointManager();
+
+	bool isInWaypointRange(Node* nWaypoint);
+	// TODO: init nIsInRange in Facade
+	int nIsInRange = 3;
+
+private:
+	Robot *robot;
+
 };
 
 } /* namespace Managers */
 
 #endif /* WAYPOINTMANAGER_H_ */
+
