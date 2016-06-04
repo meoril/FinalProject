@@ -21,21 +21,22 @@ public:
     unsigned m_Cols;
     std::vector< std::vector<unsigned char> > FatGrid;
     std::vector< std::vector<unsigned char> > RegGrid;
+    
     unsigned width, height;
     void PrintMap(const char* filename);
-
+    bool isPointOccupied(Point* pPoint);
+    
     inline unsigned getCols() {
         return m_Cols;
     };
-
+    
     inline unsigned getRows() {
         return m_Rows;
     };
 protected:
-
     std::vector<unsigned char> RegImage;
     std::vector<unsigned char> FatImage;
-
+    
 private:
     unsigned GridCellSizeInPx;
     void initMap(const char* filename);
