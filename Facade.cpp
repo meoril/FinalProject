@@ -1,9 +1,4 @@
-/*
- * Facade.cpp
- *
- *  Created on: May 31, 2016
- *      Author: colman
- */
+* Facade.cpp
 
 #include "Facade.h"
 
@@ -19,5 +14,6 @@ Facade::~Facade() {
 
 void Facade::Run(){
     PathPlanner* pathPlanner = new PathPlanner();
-    //std::list<Node*> lstStartWaypoints = pathPlanner->AStarPath();
+    Point* tempStartPoint = new Point(myConfig->getStartPositionInGrid().getX(), myConfig->getStartPositionInGrid().getY());
+    std::list<Node*> lstStartWaypoints = pathPlanner->AStarPath(*tempStartPoint, myConfig->getGoalInGrid(), myMap);
 }
