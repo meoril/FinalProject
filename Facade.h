@@ -19,6 +19,7 @@ public:
     virtual ~Facade();
     void Run();
     std::list<Node*> lstClearWaypointToDestination;
+    void printPath(Point startPoint, Point endPoint);
 private:
     Map* myMap;
     ConfigurationManager* myConfig;

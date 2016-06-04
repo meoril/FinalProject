@@ -34,9 +34,9 @@ public:
     inline unsigned getRows() {
         return m_Rows;
     };
-protected:
     std::vector<unsigned char> RegImage;
     std::vector<unsigned char> FatImage;
+protected:
     
 private:
     unsigned GridCellSizeInPx;
