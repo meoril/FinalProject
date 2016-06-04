@@ -30,17 +30,22 @@ namespace Managers{
         
         string getMapPath();
         Position getStartPosition();
+        Position getStartPositionInGrid();
         Point getGoal();
+        Point getGoalInGrid();
         Size getRobotSize();
+        double getGridMapResolution();
         double getPixelPerCm();
         double getPngGridResolution();
-        
         string mapLocation;
         Position startPosition;
+        Position* startPositionInGrid;
         Point goal;
+        Point* goalInGrid;
         Size robotSize;
         double mapResolutionCm;
         double gridResolutionCm;
+    private:
     };
 }
 #endif

@@ -4,7 +4,8 @@
  *  Created on: May 28, 2016
  *      Author: colman
  */
-
+#ifndef MAP_H_
+#define MAP_H_
 #include <vector>
 #include <math.h>
 #include "../Managers/ConfigurationManager.h"
@@ -43,3 +44,4 @@ private:
     int checkCellOccupation(vector<unsigned char> PngMap, int nRow, int nCol);
     std::vector< std::vector<unsigned char> > CreatGridFromMap(std::vector<unsigned char> PngMap,unsigned MapHeight,unsigned MapWidth, float GridResolutionCm, float PixelPerCm, unsigned &GridCols, unsigned &GridRows);
 };
+#endif
