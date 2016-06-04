@@ -7,17 +7,24 @@
 
 #ifndef PARTICLE_H_
 #define PARTICLE_H_
+#include "Position.h"
+#include "Map.h"
+#include <libplayerc++/playerc++.h>
+using namespace PlayerCc;
 
 class Particle {
 private:
-	double m_xPos, m_yPos, m_yaw, m_belief;
+	Position m_pos;
 
 public:
 	Particle(double xPos, double yPos, double yaw);
-	double getBelief();
-	void Update(double deltaX, double deltaY, double deltaYaw, float moveScan, float laserScan);
-	Particle* CreateChild();
+	float getBelief();
+	void Update(double deltaX, double deltaY, double deltaYaw, const Map* map, const LaserProxy* laser);
+	Particle* CreateChild(const int expansionRadius, const int yawRange);
 	~Particle();
+	float m_belief;
+	unsigned m_age;
+
 };
 
 #endif /* PARTICLE_H_ */
