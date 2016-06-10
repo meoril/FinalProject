@@ -52,9 +52,9 @@ namespace Managers{
         unsigned x = atoi(value.substr(0, firstSpace).c_str());
         unsigned y = atoi(value.substr(firstSpace+1, secondSpace).c_str());
         unsigned yaw = atoi(value.substr(secondSpace+1).c_str());
-        config->getStartPosition().setX(x);
-        config->getStartPosition().setY(y);
-        config->getStartPosition().setYaw(yaw);
+        config->startPosition.setX(x);
+        config->startPosition.setY(y);
+        config->startPosition.setYaw(yaw);
     }
     
     void parseRobotSize(ConfigurationManager* config, string value) {
