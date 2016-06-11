@@ -25,15 +25,20 @@ private:
 	vector<Particle *> _particles;
 
 public:
-	LocalizationManager(Map* map, LaserProxy* laser);
+	LocalizationManager(Map* map, LaserProxy* laser, Position* start);
+
+	// Gets changes in position and updates the particles accordingly
 	void update(double deltaX, double deltaY, double deltaYaw);
 	Particle *getBestParticle();
 	virtual ~LocalizationManager();
-	Position getCurrentLocation();
+
+	// Get the current position according to particle belief (Uses getBestParticle)
+	Position getCurrentPosition();
 
 	static const float MAGIC_NUM = 1.2;
 	static const int GOOD_BREED = 10;
 	static const int NORMAL_BREED = 3;
+
 private:
 	void BreedParticle(Particle* particle, int numToBreed, vector<Particle*>*  children);
 	Map* _map;

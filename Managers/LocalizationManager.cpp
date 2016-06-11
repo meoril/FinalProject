@@ -10,16 +10,20 @@
 using namespace PlayerCc;
 using namespace std;
 
-LocalizationManager::LocalizationManager(Map* map, LaserProxy* laser){
+LocalizationManager::LocalizationManager(Map* map, LaserProxy* laser, Position* start){
 	this->_map = map;
 	this->_laser = laser;
 
-	Particle* first = new Particle(0,0,0);
-	this->_particles.push_back(first);
+	// Creating first particle
+	this->_particles.push_back(new Particle(start->getX(),start->getY(),start->getYaw()));
 }
 
 void LocalizationManager::BreedParticle(Particle* particle, int numToBreed, vector<Particle*>*  children){
+
+	// Getting how much particles to create
 	int numToCreate = std::min((int)(BaseUtils::PARTICLES_NUMBER - this->_particles.size() - children->size()), (int)numToBreed);
+
+	// Creating particles
 	for (int i = 0; i<numToCreate; i++) {
 		children->push_back(particle->CreateChild(10,1));
 	}
@@ -29,7 +33,8 @@ void LocalizationManager::update(double deltaX, double deltaY, double deltaYaw){
 	vector<Particle*> toAdd;
 	vector<int> toRemove;
 
-	for (int index = 0 ; index < this->_particles.size(); ++index){
+	// Updating particles
+	for (unsigned int index = 0 ; index < this->_particles.size(); ++index){
 		Particle* particle = _particles[index];
 
 		particle->Update(deltaX,deltaY,deltaYaw, this->_map, this->_laser);
@@ -73,11 +78,12 @@ Particle* LocalizationManager::getBestParticle(){
 	return bestParticle;
 }
 
-Position LocalizationManager::getCurrentLocation(){
+Position LocalizationManager::getCurrentPosition(){
 	return this->getBestParticle()->getPosition();
 }
 
 LocalizationManager::~LocalizationManager(){
+	// Deletes all particles
 	for (vector<Particle*>::iterator it = this->_particles.begin() ; it != this->_particles.end(); ++it){
 		delete *it;
 	}
