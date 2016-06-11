@@ -7,6 +7,7 @@
 
 #include "Particle.h"
 #include "../Utils/BaseUtils.h"
+#include <utility>
 #include <iostream>
 #include <libplayerc++/playerc++.h>
 using namespace PlayerCc;
@@ -35,24 +36,23 @@ float probabilityByMovement(double x, double y)
 
 	return 0.1;
 }
+bool checkForObstacles(Position* pos,const Map* map){
+		// In case we are out of bound, return a low probability.
+		if (pos->getX() < 0 || pos->getX()>= map->width ||
+				pos->getY() < 0 || pos->getY() >= map->height)
+		{
+			return true;
+		}
 
+		// In case there is an obstacle in this point, return a low probability.
+		if (map->RegGrid[pos->getX()][pos->getY()] == 1)
+		{
+			return true;
+		}
+
+		return false;
+}
 float probabilityByLaserScan(Position* pos, const Map* map, const LaserProxy* laserProxy) {
-	int xCoord = floor(pos->getX());
-	int yCoord = floor(pos->getY());
-
-	// In case we are out of bound, return a low probability.
-	if (pos->getX() < 0 || pos->getX()>= map->width ||
-			pos->getY() < 0 || pos->getY() >= map->height)
-	{
-		return 0;
-	}
-
-	// In case there is an obstacle in this point, return a low probability.
-	if (map->RegGrid[yCoord][xCoord] == 1)
-	{
-		return 0;
-	}
-
 	int scans = laserProxy->GetCount();
 	float maxRange = laserProxy->GetMaxRange();
 
@@ -103,11 +103,14 @@ float Random(float min, float max)
     return min + num * (max - min);
 }
 
+Particle::~Particle(){
+
+}
 Particle::Particle(double xPos, double yPos, double yaw)
 	: m_pos(xPos,yPos,yaw)
 {
 	this->m_belief = -1;
-	this->m_age = 1;
+	this->m_age = 0;
 }
 
 float Particle::getBelief(){
@@ -118,12 +121,20 @@ float Particle::getBelief(){
 		this->m_pos.m_Pnt.m_X +=deltaX;
 		this->m_pos.m_Pnt.m_Y +=deltaY;
 
-		// Calculating probability
-		float probability = probabilityByLaserScan(&this->m_pos, map, laser) *
-						probabilityByMovement(deltaX,deltaY) * 1.2;
-		// Setting belief
-		if (probability > 1){
-			this->m_belief = 1;
+		if (map == NULL && laser == NULL){
+			this-> m_belief = Random(0,1);
+		}
+		else {
+		if (checkForObstacles(&this->m_pos, map))
+		{
+			this->m_belief = 0;
+		}
+		else {
+			// Calculating probability
+			this->m_belief = std::min(probabilityByLaserScan(&this->m_pos, map, laser) *
+									probabilityByMovement(deltaX,deltaY) * 1.2,(double)1);
+
+		}
 		}
 
 
@@ -135,4 +146,8 @@ float Particle::getBelief(){
 		    float newYaw = this->m_pos.getYaw() + Random(-yawRange, yawRange);
 		    return new Particle(newX, newY, newYaw);
 	}
+
+Position Particle::getPosition(){
+	return this->m_pos;
+}
 
