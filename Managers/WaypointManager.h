@@ -9,6 +9,7 @@
 #define WAYPOINTMANAGER_H_
 #include "../Models/Node.h"
 #include "../Models/Robot.h"
+#include "../Utils/BaseUtils.h"
 
 namespace Managers {
 
@@ -19,7 +20,9 @@ public:
 
 	bool isInWaypointRange(Node* nWaypoint);
 	// TODO: init nIsInRange in Facade
-	int nIsInRange = 3;
+	int nIsInRange;
+	int createWayPoints(std::list<Node*> lstinPath, std::list<Node*> lstoutWayPoints);
+
 
 private:
 	Robot *robot;

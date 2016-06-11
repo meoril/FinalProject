@@ -5,6 +5,7 @@
  *      Author: colman
  */
 
+
 #ifndef FACADE_H_
 #define FACADE_H_
 #include "Models/Map.h"
@@ -13,6 +14,12 @@
 #include "Utils/PathPlanner.h"
 #include "Managers/ConfigurationManager.h"
 #include "Models/Robot.h"
+#include "Managers/WaypointManager.h"
+#include "Managers/LocalizationManager.h"
+#include "Managers/MovementManager.h"
+#include "Models/Node.h"
+
+
 class Facade {
 public:
     Facade();
@@ -24,6 +31,8 @@ private:
     Map* myMap;
     ConfigurationManager* myConfig;
     Robot* myRobot;
+    LocalizationManager* locManager;
+    MovementManager* moveManager;
 };
 
 #endif /* FACADE_H_ */

@@ -7,23 +7,47 @@
 
 #include "Facade.h"
 
-Facade::Facade() {
+Facade::Facade()
+{
     myConfig = new ConfigurationManager("Resources/Parameters.txt");
     myMap = new Map(myConfig);
     myRobot = new Robot("127.0.0.1", 6555, myConfig->getStartPosition(), myConfig->getGoal(), myConfig->getRobotSize(), true);
-    
+
+    LaserProxy* lsProxy;
+    locManager = new LocalizationManager(myMap, lsProxy);
+
+    moveManager = new MovementManager();
 }
 
 Facade::~Facade() {
 }
 
-void Facade::Run(){
+void Facade::Run()
+{
     PathPlanner* pathPlanner = new PathPlanner();
     Point* tempStartPoint = new Point(myConfig->getStartPositionInGrid().getX(), myConfig->getStartPositionInGrid().getY());
-    std::list<Node*> lstStartWaypoints = pathPlanner->AStarPath(*tempStartPoint, myConfig->getGoalInGrid(), myMap);
-    lstStartWaypoints = pathPlanner->AStarClearList(lstStartWaypoints, myConfig->getGoalInGrid());
-    
+    std::list<Node*> lstPath = pathPlanner->AStarPath(*tempStartPoint, myConfig->getGoalInGrid(), myMap);
+    lstPath = pathPlanner->AStarClearList(lstPath, myConfig->getGoalInGrid());
     this->printPath(*tempStartPoint, myConfig->getGoalInGrid());
+
+    std::list<Node*> lstWayPoints;
+    WaypointManager* mngWayPoint = new WaypointManager();
+    mngWayPoint->createWayPoints(lstPath, lstWayPoints);
+    Particle* best;
+
+
+    for (std::list<Node*>::iterator listIterator = lstWayPoints.begin();
+    				listIterator != lstWayPoints.end() ;listIterator++)
+    {
+    	moveManager->moveToNextWatPoint(((Node*)*listIterator)->getX(),
+    									((Node*)*listIterator)->getY(),
+    									locManager);
+
+		best = locManager->getBestParticle();
+		cout << "Best particle: x - " << best->getPosition().getX() << "  y - " << best->getPosition().getX() << endl
+			 << "Current position: x - " << myRobot->getX() << " y - " << myRobot->getY() << endl << endl;
+
+    }
 }
 
 void Facade::printPath(Point startPoint, Point endPoint){

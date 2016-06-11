@@ -28,6 +28,7 @@ public:
     static double DegreeToRadian(double degree);
     static double RadianToDegree(double radian);
     static double DegreeBetweenPoints(double dFirstX, double dFirstY, double dSecondX, double dSecondY);
+    static double Distance(double x1, double y1, double x2, double y2);
     
     // Particles
     static const int PARTICLES_NUMBER = 150;
