@@ -14,7 +14,8 @@ Facade::Facade()
     myRobot = new Robot("127.0.0.1", 6555, myConfig->getStartPosition(), myConfig->getGoal(), myConfig->getRobotSize(), true);
 
     LaserProxy* lsProxy;
-    locManager = new LocalizationManager(myMap, lsProxy);
+    locManager = new LocalizationManager(myMap, lsProxy, new Position(
+    		myRobot->getX(), myRobot->getY(), myRobot->getYaw()));
 
     moveManager = new MovementManager();
 }

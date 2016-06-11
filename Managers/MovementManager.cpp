@@ -17,7 +17,7 @@ void MovementManager::moveToNextWatPoint(int nXdest, int nYdest, LocalizationMan
 {
 	myrobot->Read();
 
-	Position psCurrnt = locManager->getCurrentLocation();
+	Position psCurrnt = locManager->getCurrentPosition();
 
 	int nCurrX = psCurrnt.getX();
 	int nCurrY = psCurrnt.getY();
