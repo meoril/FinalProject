@@ -39,6 +39,12 @@ namespace Managers{
             int colon = line.find(':');
             lineDec.name = line.substr(0, colon);
             lineDec.value = line.substr(colon + 2, line.length() - colon - 2);
+            string::size_type pos = 0;
+            if (pos = lineDec.value.find ("\r\n", pos) != string::npos)
+            {
+                lineDec.value.erase ( pos, 2 );
+            }
+            
             lines.push_back(lineDec);
         }
         return lines;
