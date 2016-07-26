@@ -35,8 +35,8 @@ namespace Managers{
         Point getGoalInGrid();
         Size getRobotSize();
         double getGridMapResolution();
-        double getPixelPerCm();
-        double getPngGridResolution();
+        double getMapResolution();
+        double getGridResolution();
         string mapLocation;
         Position startPosition;
         Position* startPositionInGrid;

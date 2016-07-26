@@ -29,7 +29,7 @@ void Map::initMap(ConfigurationManager* config) {
     // calc the size of the robot in pic px
     unsigned PxToBlow = ceil(
                              config->getRobotSize().RadiosSize()
-                             / config->getPngGridResolution());
+                             / config->getGridResolution());
     
     // Paint the new map image in white
     for(unsigned int i = 0; i < RegImage.size(); i++)
@@ -68,13 +68,13 @@ void Map::initMap(ConfigurationManager* config) {
     
     // create grid from the fat and regular map
     this->FatGrid = this->CreatGridFromMap(FatImage, height, width,
-                                           config->getPngGridResolution(), config->getPixelPerCm(),
+                                           config->getGridResolution(), config->getMapResolution(),
                                            this->m_Cols, this->m_Rows);
     
     
     
     this->RegGrid = this->CreatGridFromMap(RegImage, height, width,
-                                           config->getPngGridResolution(), config->getPixelPerCm(),
+                                           config->getGridResolution(), config->getMapResolution(),
                                            this->m_Cols, this->m_Rows);
     
 }
@@ -104,12 +104,12 @@ int Map::checkCellOccupation(std::vector<unsigned char> PngMap, int nRow, int nC
 
 std::vector< std::vector<unsigned char> > Map::CreatGridFromMap(std::vector<unsigned char> PngMap,
                                                                 unsigned MapHeight, unsigned MapWidth, float GridResolutionCm,
-                                                                float PixelPerCm, unsigned& GridCols, unsigned& GridRows) {
+                                                                float MapResolution, unsigned& GridCols, unsigned& GridRows) {
     
     // Calc grid size
-    GridCellSizeInPx = ceil(GridResolutionCm / PixelPerCm);
-    GridCols = ceil(MapWidth * PixelPerCm / GridResolutionCm);
-    GridRows = ceil(MapHeight * PixelPerCm / GridResolutionCm);
+    GridCellSizeInPx = ceil(GridResolutionCm / MapResolution);
+    GridCols = ceil(MapWidth * MapResolution / GridResolutionCm);
+    GridRows = ceil(MapHeight * MapResolution / GridResolutionCm);
     
     vector< vector<unsigned char> > tempGrid;
     tempGrid.resize(GridCols);
@@ -129,7 +129,8 @@ std::vector< std::vector<unsigned char> > Map::CreatGridFromMap(std::vector<unsi
 }
 
 bool Map::isPointOccupied(Point* pPoint){
-    return !this->FatGrid[pPoint->getX()][pPoint->getY()];
+    //TODO: FIX the adjacent coordinates that send -1 at the beginning
+    return !this->FatGrid[pPoint->getY()][pPoint->getX()];
 }
 
 Map::~Map() {

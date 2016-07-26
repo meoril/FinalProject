@@ -10,6 +10,7 @@
 #include <iostream>
 #include <fstream>
 #include <stdlib.h>
+#include <unistd.h>
 using namespace std;
 
 struct Decleration {
@@ -22,6 +23,11 @@ struct Decleration {
 namespace Managers{
     vector<Decleration> readLines(string fileName) {
         vector<Decleration> lines;
+        char buffer[256];
+        char *val = getcwd(buffer, sizeof(buffer));
+        if (val) {
+            std::cout << buffer << std::endl;
+        }
         ifstream fileStream(fileName.c_str());
         if (!fileStream) {
             cout << "WAT";
@@ -32,7 +38,7 @@ namespace Managers{
             Decleration lineDec;
             int colon = line.find(':');
             lineDec.name = line.substr(0, colon);
-            lineDec.value = line.substr(colon + 2, line.length() - colon - 3);
+            lineDec.value = line.substr(colon + 2, line.length() - colon - 2);
             lines.push_back(lineDec);
         }
         return lines;
@@ -108,11 +114,11 @@ namespace Managers{
         return *this->goalInGrid;
     }
     
-    double ConfigurationManager::getPngGridResolution(){
+    double ConfigurationManager::getGridResolution(){
         return gridResolutionCm;
     }
     
-    double ConfigurationManager::getPixelPerCm(){
+    double ConfigurationManager::getMapResolution(){
         return mapResolutionCm;
     }
     
@@ -138,7 +144,7 @@ namespace Managers{
     }
     
     double ConfigurationManager::getGridMapResolution(){
-        return this->getPngGridResolution() / this->getPixelPerCm();
+        return this->getGridResolution() / this->getMapResolution();
     }
     
     ConfigurationManager::~ConfigurationManager() {
