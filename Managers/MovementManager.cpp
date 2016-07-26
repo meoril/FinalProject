@@ -13,7 +13,7 @@ MovementManager::MovementManager() {
 
 }
 
-void MovementManager::moveToNextWatPoint(int nXdest, int nYdest, LocalizationManager *locManager)
+int MovementManager::moveToNextWatPoint(int nXdest, int nYdest, LocalizationManager *locManager)
 {
 	myrobot->Read();
 
@@ -65,6 +65,8 @@ void MovementManager::moveToNextWatPoint(int nXdest, int nYdest, LocalizationMan
 	}
 
 	myrobot->setSpeed(0, 0);
+
+	return nCurrYaw;
 
 }
 

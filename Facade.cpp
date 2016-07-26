@@ -9,9 +9,9 @@
 
 Facade::Facade()
 {
-    myConfig = new ConfigurationManager("Resources/Parameters.txt");
+    myConfig = new ConfigurationManager("Resources/parameters.txt");
     myMap = new Map(myConfig);
-    myRobot = new Robot("127.0.0.1", 6555, myConfig->getStartPosition(), myConfig->getGoal(), myConfig->getRobotSize(), true);
+    myRobot = new Robot("127.0.0.1", 6665, myConfig->getStartPosition(), myConfig->getGoal(), myConfig->getRobotSize(), true);
 
     LaserProxy* lsProxy;
     locManager = new LocalizationManager(myMap, lsProxy, new Position(
@@ -21,6 +21,12 @@ Facade::Facade()
 }
 
 Facade::~Facade() {
+	delete myConfig;
+	delete myMap;
+	delete myRobot;
+	delete locManager;
+	delete MovementManager;
+
 }
 
 void Facade::Run()
@@ -40,11 +46,18 @@ void Facade::Run()
     for (std::list<Node*>::iterator listIterator = lstWayPoints.begin();
     				listIterator != lstWayPoints.end() ;listIterator++)
     {
-    	moveManager->moveToNextWatPoint(((Node*)*listIterator)->getX(),
+    	Node* nCurr = *listIterator;
+    	int nCurrYaw = moveManager->moveToNextWatPoint(((Node*)*listIterator)->getX(),
     									((Node*)*listIterator)->getY(),
     									locManager);
 
 		best = locManager->getBestParticle();
+
+		locManager->update(best->getPosition().getX() - nCurr->getX(),
+						   best->getPosition().getY() - nCurr->getY(),
+						   best->getPosition().getYaw() - nCurrYaw);
+
+
 		cout << "Best particle: x - " << best->getPosition().getX() << "  y - " << best->getPosition().getX() << endl
 			 << "Current position: x - " << myRobot->getX() << " y - " << myRobot->getY() << endl << endl;
 
