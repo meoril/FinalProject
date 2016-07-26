@@ -40,9 +40,9 @@ namespace Managers{
             lineDec.name = line.substr(0, colon);
             lineDec.value = line.substr(colon + 2, line.length() - colon - 2);
             string::size_type pos = 0;
-            if (pos = lineDec.value.find ("\r\n", pos) != string::npos)
+            if (pos = lineDec.value.find ("\r", pos) != string::npos)
             {
-                lineDec.value.erase ( pos, 2 );
+                lineDec.value.erase(std::remove(lineDec.value.begin(), lineDec.value.end(), '\r'), lineDec.value.end());
             }
             
             lines.push_back(lineDec);
