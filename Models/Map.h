@@ -42,6 +42,6 @@ private:
     unsigned GridCellSizeInPx;
     void initMap(ConfigurationManager* config);
     int checkCellOccupation(vector<unsigned char> PngMap, int nRow, int nCol);
-    std::vector< std::vector<unsigned char> > CreatGridFromMap(std::vector<unsigned char> PngMap,unsigned MapHeight,unsigned MapWidth, float GridResolutionCm, float PixelPerCm, unsigned &GridCols, unsigned &GridRows);
+    std::vector< std::vector<unsigned char> > CreatGridFromMap(std::vector<unsigned char> PngMap,unsigned MapHeight,unsigned MapWidth, float GridResolutionCm, float MapResolution, unsigned &GridCols, unsigned &GridRows);
 };
 #endif
