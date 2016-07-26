@@ -6,17 +6,17 @@
 using namespace std;
 Node::Node()
 {
-    parent = NULL;
+	parent = NULL;
     closed = false;
     opened = false;
 
     x = y = f = g = h = 0;
 }
 
-Node::Node(int x, int y, bool w)
+Node::Node(int x, int y, bool w, Node *parent)
 {
 	Node();
-
+	this->parent = parent;
     this->walkable = w;
     this->x = x;
     this->y = y;
@@ -59,7 +59,11 @@ float Node::getYf()
 
 int Node::getGScore(Node *p)
 {
-    return p->g + ((x == p->x || y == p->y) ? 10 : 14);
+	if (p->getX() != this->getX() && p->getY() != this->getY()){
+		return p->getGScore() + 14;
+	}
+
+    return p->getGScore() + 10;
 }
 
 int Node::getHScore(Node *p)
@@ -84,7 +88,13 @@ int Node::getFScore()
 
 void Node::computeScores(Node *end)
 {
-    g = getGScore(parent);
+	if (this->parent != NULL){
+		g = this->getGScore(this->parent);
+	}
+	else{
+		g = 0;
+	}
+
     h = getHScore(end);
     f = g + h;
 }
