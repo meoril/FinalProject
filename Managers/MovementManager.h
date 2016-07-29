@@ -25,7 +25,7 @@ private:
 	const double LINEARSPEED = 0.8;
 	const double SLOWSPEEDRATIO = 0.1;
 	const double DEGREETOLERANCE = 1;
-	const double YAWSPEED = 0.2;
+	const double YAWSPEED = 0.02;
 
 };
 
