@@ -21,13 +21,13 @@
 
 
 class Facade {
-public:
+    public:
     Facade();
     virtual ~Facade();
     void Run();
     std::list<Node*> lstClearWaypointToDestination;
-    void printPath(Point startPoint, Point endPoint);
-private:
+    void printPath(std::list<Node*>& lstStarPath, std::string name);
+    private:
     Map* myMap;
     ConfigurationManager* myConfig;
     Robot* myRobot;
