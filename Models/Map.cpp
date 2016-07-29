@@ -120,23 +120,23 @@ std::vector< std::vector<unsigned char> > Map::CreatGridFromMap(std::vector<unsi
         tempGrid[i].resize(GridRows);
     }
     
-    fstream file;
-    file.open("meoriTry.txt");
+    //fstream file;
+    //file.open("meoriTry.txt");
     
     for (unsigned i = 0; i < GridCols; ++i) {
         for (unsigned j = 0; j < GridRows; ++j) {
             tempGrid[i][j] = this->checkCellOccupation(PngMap, i, j);
-            if (i != 362 && j != 305)
-            file << this->checkCellOccupation(PngMap, i, j);
-            else if (i == 362 && j == 305)
-            file << 8;
-            else
-            file << 5;
+            //if (i != 362 && j != 305)
+            //file << this->checkCellOccupation(PngMap, i, j);
+            //else if (i == 362 && j == 305)
+            //file << 8;
+            //else
+            //file << 5;
         }
-        file << endl;
+        //file << endl;
     }
     
-    file.close();
+    //file.close();
     return tempGrid;
     
 }
