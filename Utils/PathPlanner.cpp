@@ -13,13 +13,14 @@ std::list<Node*> PathPlanner::AStarPath (Point startPoint, Point goalPoint, Map 
 {
     std::list<Node*> openList;
     std::list<Node*> closedList;
-    std::map<Node*, Node*> nSourceNodes;
+    //std::map<Node*, Node*> nSourceNodes;
     
     
     
     Node *nStart 	= new Node(startPoint.getX(), startPoint.getY(), true, NULL);
     Node *nEnd 		= new Node(goalPoint.getX(), goalPoint.getY(), true, NULL);
     Node *nCurrnt 	= new Node(-1, -1, true, NULL);
+    Node *nNext;
     
     nStart->computeScores(nEnd);
     
@@ -93,11 +94,10 @@ std::list<Node*> PathPlanner::AStarPath (Point startPoint, Point goalPoint, Map 
                     // Check if cell is free and not in open list for the robot
                     if ((!isPointInOpenedList) && (map->isPointOccupied(new Point(adjacentX, adjacentY))))
                     {
-                        Node *thisPoint = new Node(adjacentX, adjacentY, nCurrnt, NULL);
-                        thisPoint->computeScores(nEnd);
-                        openList.push_back(thisPoint);
-                        
-                        nSourceNodes[thisPoint] = nCurrnt;
+                        nNext = new Node(adjacentX, adjacentY, nCurrnt, NULL);
+                        nNext->computeScores(nEnd);
+                        nNext->setParent(nCurrnt);
+                        openList.push_back(nNext);
                     }
                 }
             }
@@ -105,74 +105,14 @@ std::list<Node*> PathPlanner::AStarPath (Point startPoint, Point goalPoint, Map 
     }
     
     std::list<Node*> lstPath;
-    Node *pathCurrent = nCurrnt;
-    lstPath.push_front(nCurrnt);
     
-    int changeXPrev = pathCurrent->getX() - nSourceNodes[pathCurrent]->getX();
-    int changeYPrev = pathCurrent->getY() - nSourceNodes[pathCurrent]->getY();
-    int changeX;
-    int changeY;
-    
-    // Add all nodes in path to list - Take only nodes with changing in X or Y coords
-    // relatively to the previous ones
-    while (!pathCurrent->isEqual(nStart))
-    {
-        changeX = pathCurrent->getX() - nSourceNodes[pathCurrent]->getX();
-        changeY = pathCurrent->getY() - nSourceNodes[pathCurrent]->getY();
-        
-        // if there is a change in X or in Y, add it to the list
-        if ((changeX != changeXPrev) || (changeY != changeYPrev) || (nSourceNodes[pathCurrent]->isEqual(nStart)))
-        {
-            // if the father of the current is the starting point...path the current and add the start
-            if (nSourceNodes[pathCurrent]->isEqual(nStart))
-            {
-                lstPath.push_front(nStart);
-            }
-            else
-            {
-                lstPath.push_front(pathCurrent);
-            }
-        }
-        
-        changeXPrev = changeX;
-        changeYPrev = changeY;
-        
-        pathCurrent = nSourceNodes[pathCurrent];
+    while (nCurrnt->hasParent() && !nCurrnt->isEqual(nStart)){
+        lstPath.push_back(nCurrnt);
+        cout << nCurrnt->getX() << " " << nCurrnt->getY() << endl;
+        nCurrnt = nCurrnt->getParent();
     }
     
     return lstPath;
-}
-
-std::list<Node*> PathPlanner::AStarClearListByPrev(std::list<Node*> lstAll)
-{
-    std::list<Node*> lstToRet;
-    std::list<Node*>::iterator curr = lstAll.begin();
-    Node* prev = (Node*)(*curr);
-    lstToRet.push_front(prev);
-    curr++;
-    double dSum = 0;
-    double dCurrOffset;
-    double dPrevOffset = BaseUtils::DegreeBetweenPoints(prev->getX(), prev->getY(), (*curr)->getX(),(*curr)->getY());
-    
-    while (curr != lstAll.end())
-    {
-        dCurrOffset = BaseUtils::DegreeBetweenPoints(prev->getX(), prev->getY(), (*curr)->getX(),(*curr)->getY());
-        dSum += dCurrOffset - dPrevOffset;
-        dPrevOffset = dCurrOffset;
-        
-        if ((dSum < -0.2) || (0.2 < dSum))
-        {
-            lstToRet.push_front(prev);
-            dSum = 0;
-            dCurrOffset = 0;
-            dPrevOffset = BaseUtils::DegreeBetweenPoints(prev->getX(), prev->getY(), (*curr)->getX(),(*curr)->getY());
-        }
-        
-        prev = (Node*)(*curr);
-        curr++;
-    }
-    
-    return (lstToRet);
 }
 
 std::list<Node*> PathPlanner::AStarClearList(std::list<Node*> lstAll, Point goalPoint)
