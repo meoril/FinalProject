@@ -36,7 +36,7 @@ float probabilityByMovement(double x, double y)
 
 	return 0.1;
 }
-bool checkForObstacles(Position* pos,const Map* map){
+bool checkForObstacles(Position* pos,Map* map){
 		// In case we are out of bound, return a low probability.
 		if (pos->getX() < 0 || pos->getX()>= map->width ||
 				pos->getY() < 0 || pos->getY() >= map->height)
@@ -45,7 +45,7 @@ bool checkForObstacles(Position* pos,const Map* map){
 		}
 
 		// In case there is an obstacle in this point, return a low probability.
-		if (map->RegGrid[pos->getX()][pos->getY()] == 1)
+		if (map->isPointOccupiedInMap(&pos->m_Pnt))
 		{
 			return true;
 		}
@@ -116,15 +116,11 @@ Particle::Particle(double xPos, double yPos, double yaw)
 float Particle::getBelief(){
 	return this->m_belief;
 }
-	void Particle::Update(double deltaX, double deltaY, double deltaYaw, const Map* map, const LaserProxy* laser){
+	void Particle::Update(double deltaX, double deltaY, double deltaYaw, Map* map, const LaserProxy* laser){
 		this->m_pos.m_Yaw += deltaYaw;
 		this->m_pos.m_Pnt.m_X +=deltaX;
 		this->m_pos.m_Pnt.m_Y +=deltaY;
 
-		if (map == NULL && laser == NULL){
-			this-> m_belief = Random(0,1);
-		}
-		else {
 		if (checkForObstacles(&this->m_pos, map))
 		{
 			this->m_belief = 0;
@@ -135,17 +131,16 @@ float Particle::getBelief(){
 									probabilityByMovement(deltaX,deltaY) * 1.2,(double)1);
 
 		}
-		}
-
 
 	}
-	Particle* Particle::CreateChild(const int expansionRadius, const int yawRange)
-	{
-		   float newX = this->m_pos.getX() + Random(-expansionRadius, expansionRadius);
-		    float newY = this->m_pos.getY() + Random(-expansionRadius, expansionRadius);
-		    float newYaw = this->m_pos.getYaw() + Random(-yawRange, yawRange);
-		    return new Particle(newX, newY, newYaw);
-	}
+
+Particle* Particle::CreateChild(const int expansionRadius, const int yawRange)
+{
+	   float newX = this->m_pos.getX() + Random(-expansionRadius, expansionRadius);
+	    float newY = this->m_pos.getY() + Random(-expansionRadius, expansionRadius);
+	    float newYaw = this->m_pos.getYaw() + Random(-yawRange, yawRange);
+	    return new Particle(newX, newY, newYaw);
+}
 
 Position Particle::getPosition(){
 	return this->m_pos;
