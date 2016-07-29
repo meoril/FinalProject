@@ -14,7 +14,7 @@
 
 using namespace Managers;
 class Map {
-public:
+    public:
     Map(ConfigurationManager* config);
     Map(unsigned Rows,unsigned Cols);
     ~Map();
@@ -25,7 +25,8 @@ public:
     
     unsigned width, height;
     void PrintMap(const char* filename);
-    bool isPointOccupied(Point* pPoint);
+    bool isPointOccupiedInGrid(Point* pPoint);
+    bool isPointOccupiedInMap(Point* pPoint);
     
     inline unsigned getCols() {
         return m_Cols;
@@ -36,9 +37,9 @@ public:
     };
     std::vector<unsigned char> RegImage;
     std::vector<unsigned char> FatImage;
-protected:
+    protected:
     
-private:
+    private:
     unsigned GridCellSizeInPx;
     void initMap(ConfigurationManager* config);
     int checkCellOccupation(vector<unsigned char> PngMap, int nRow, int nCol);

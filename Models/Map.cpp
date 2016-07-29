@@ -23,6 +23,8 @@ void Map::initMap(ConfigurationManager* config) {
     std::cout << "decoder error " << error << ": "
 				<< lodepng_error_text(error) << std::endl;
     
+    int stam = RegImage.size();
+    
     // Create the fat img
     FatImage.resize(width * height * 4);
     
@@ -66,6 +68,7 @@ void Map::initMap(ConfigurationManager* config) {
         }
     }
     
+    int bla = FatImage.size();
     // create grid from the fat map
     this->FatGrid = this->CreatGridFromMap(FatImage, height, width,
                                            config->getGridResolution(), config->getMapResolution(),
@@ -81,7 +84,6 @@ void Map::initMap(ConfigurationManager* config) {
 int Map::checkCellOccupation(std::vector<unsigned char> PngMap, int nRow, int nCol){
     nRow *= GridCellSizeInPx;
     nCol *= GridCellSizeInPx;
-    //int nFreeCellsCount = 0;
     
     for (unsigned int currRow = 0; currRow < GridCellSizeInPx; currRow++){
         for (unsigned int currCol = 0; currCol < GridCellSizeInPx; currCol++){
@@ -91,14 +93,7 @@ int Map::checkCellOccupation(std::vector<unsigned char> PngMap, int nRow, int nC
         }
     }
     
-    //if (nFreeCellsCount < 16){
-    // Occupied cell
-    //return 1;
-    //}
-    //else{
-    // Free cell
     return 0;
-    //}
 }
 
 std::vector< std::vector<unsigned char> > Map::CreatGridFromMap(std::vector<unsigned char> PngMap,
@@ -124,11 +119,14 @@ std::vector< std::vector<unsigned char> > Map::CreatGridFromMap(std::vector<unsi
     }
     
     return tempGrid;
-    
 }
 
-bool Map::isPointOccupied(Point* pPoint){
+bool Map::isPointOccupiedInGrid(Point* pPoint){
     return !this->FatGrid[pPoint->getY()][pPoint->getX()];
+}
+
+bool Map::isPointOccupiedInMap(Point* pPoint){
+    return !this->FatImage[pPoint->getY() * 4 + pPoint->getX() * width * 4];
 }
 
 Map::~Map() {

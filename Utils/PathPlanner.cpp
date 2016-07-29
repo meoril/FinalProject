@@ -92,7 +92,7 @@ std::list<Node*> PathPlanner::AStarPath (Point startPoint, Point goalPoint, Map 
                     }
                     
                     // Check if cell is free and not in open list for the robot
-                    if ((!isPointInOpenedList) && (map->isPointOccupied(new Point(adjacentX, adjacentY))))
+                    if ((!isPointInOpenedList) && (map->isPointOccupiedInGrid(new Point(adjacentX, adjacentY))))
                     {
                         nNext = new Node(adjacentX, adjacentY, nCurrnt, NULL);
                         nNext->computeScores(nEnd);
