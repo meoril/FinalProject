@@ -17,7 +17,7 @@ Facade::Facade()
     locManager = new LocalizationManager(myMap, lsProxy, new Position(
     		myRobot->getX(), myRobot->getY(), myRobot->getYaw()));
 
-    moveManager = new MovementManager();
+    moveManager = new MovementManager(myRobot);
 }
 
 Facade::~Facade() {
@@ -25,8 +25,7 @@ Facade::~Facade() {
 	delete myMap;
 	delete myRobot;
 	delete locManager;
-	delete MovementManager;
-
+	delete moveManager;
 }
 
 void Facade::Run()
@@ -39,8 +38,9 @@ void Facade::Run()
 
     std::list<Node*> lstWayPoints;
     WaypointManager* mngWayPoint = new WaypointManager();
-    mngWayPoint->createWayPoints(lstPath, lstWayPoints);
+    mngWayPoint->createWayPoints(lstPath, &lstWayPoints);
     Particle* best;
+
 
 
     for (std::list<Node*>::iterator listIterator = lstWayPoints.begin();

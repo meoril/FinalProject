@@ -8,13 +8,16 @@
 #include "MovementManager.h"
 
 
-MovementManager::MovementManager() {
-	// TODO Auto-generated constructor stub
+MovementManager::MovementManager(Robot* myinRobot) {
+
+	myrobot = myinRobot;
+
 
 }
 
 int MovementManager::moveToNextWatPoint(int nXdest, int nYdest, LocalizationManager *locManager)
 {
+
 	myrobot->Read();
 
 	Position psCurrnt = locManager->getCurrentPosition();
@@ -23,10 +26,12 @@ int MovementManager::moveToNextWatPoint(int nXdest, int nYdest, LocalizationMana
 	int nCurrY = psCurrnt.getY();
 	int nCurrYaw = psCurrnt.getYaw();
 
-	//nCurrX = myrobot->getX();
-	//nCurrY = myrobot->getY();
+	int nRobCurrX = myrobot->getX();
+	int nRobCurrY = myrobot->getY();
+	int nRobCurrYaw = myrobot->getYaw();
 
 	cout << "x: " << nCurrX << ", y: " << nCurrY << endl;
+	cout << "x rob: " << nRobCurrX << ", y rob: " << nRobCurrY << endl;
 
 	// Turn to the right direcation
 	while (BaseUtils::DegreeToRadian(BaseUtils::DegreeBetweenPoints(nCurrX, nCurrY, nXdest, nYdest))
@@ -40,16 +45,22 @@ int MovementManager::moveToNextWatPoint(int nXdest, int nYdest, LocalizationMana
 	// Move fast
 	while (BaseUtils::Distance(nCurrX, nCurrY, nXdest, nYdest) > SLOWSPEEDRANGE)
 	{
-		myrobot->setSpeed(LINEARSPEED, 0);
+		myrobot->Read();
+		myrobot->Read();
+		//myrobot->setSpeed(LINEARSPEED, 0);
+		myrobot->setSpeed(2, 0);
 
-		//myrobot->Read();
-		//nCurrX = myrobot->getX();
-		//nCurrY = myrobot->getY();
+		nRobCurrX = myrobot->getX();
+		nRobCurrY = myrobot->getY();
+
+		locManager->update(nRobCurrX - nCurrX, nRobCurrY - nCurrY, nRobCurrYaw - nCurrYaw);
+		psCurrnt = locManager->getCurrentPosition();
 
 		nCurrX = psCurrnt.getX();
 		nCurrY = psCurrnt.getY();
 
 		cout << "x: " << nCurrX << ", y: " << nCurrY << endl;
+		cout << "x rob: " << nRobCurrX << ", y rob: " << nRobCurrY << endl;
 	}
 
 	// Move slow to get to the waypoint

@@ -35,11 +35,13 @@ bool WaypointManager::isInWaypointRange(Node* nWaypoint)
 }
 
 
-int WaypointManager::createWayPoints(std::list<Node*> lstinPath, std::list<Node*> lstoutWayPoints)
+int WaypointManager::createWayPoints(std::list<Node*> lstinPath, std::list<Node*>* lstoutWayPoints)
 {
 	int nNumOfWayPoints = 0;
 	int nCurrDegree;
 	int nNextDegree;
+
+	cout << lstinPath.size() << endl;
 
 	// Get three points from the list
 	std::list<Node*>::iterator next = lstinPath.begin();
@@ -48,7 +50,8 @@ int WaypointManager::createWayPoints(std::list<Node*> lstinPath, std::list<Node*
 	Node* curr = (Node*)(*next);
 	next++;
 
-	lstoutWayPoints.push_front(prev);
+	lstoutWayPoints->push_back(prev);
+	nNumOfWayPoints++;
 
 	if(next == lstinPath.end())
 	{
@@ -67,7 +70,7 @@ int WaypointManager::createWayPoints(std::list<Node*> lstinPath, std::list<Node*
 			// the robot is in the same direction, the point would not be in the way points
 			if (nCurrDegree != nNextDegree)
 			{
-				lstoutWayPoints.push_back(curr);
+				lstoutWayPoints->push_back(curr);
 				nNumOfWayPoints++;
 			}
 
@@ -76,6 +79,9 @@ int WaypointManager::createWayPoints(std::list<Node*> lstinPath, std::list<Node*
 			curr = (Node*)(*next);
 			next++;
 		}
+
+		nNumOfWayPoints++;
+		lstoutWayPoints->push_back(curr);
 
 		cout << nNumOfWayPoints << " way points created" << endl;
 	}

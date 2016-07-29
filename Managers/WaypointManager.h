@@ -21,7 +21,7 @@ public:
 	bool isInWaypointRange(Node* nWaypoint);
 	// TODO: init nIsInRange in Facade
 	int nIsInRange;
-	int createWayPoints(std::list<Node*> lstinPath, std::list<Node*> lstoutWayPoints);
+	int createWayPoints(std::list<Node*> lstinPath, std::list<Node*>* lstoutWayPoints);
 
 
 private:

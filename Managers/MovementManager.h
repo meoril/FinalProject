@@ -14,7 +14,7 @@
 
 class MovementManager {
 public:
-	MovementManager();
+	MovementManager(Robot* myinRobot);
 	virtual ~MovementManager();
 	int moveToNextWatPoint(int nXdest, int nYdest, LocalizationManager *loc);
 
