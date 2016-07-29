@@ -66,10 +66,16 @@ void Map::initMap(ConfigurationManager* config) {
         }
     }
     
-    // create grid from the fat and regular map
+    // create grid from the fat map
     this->FatGrid = this->CreatGridFromMap(FatImage, height, width,
                                            config->getGridResolution(), config->getMapResolution(),
                                            this->m_Cols, this->m_Rows);
+    
+    // create grid from the regular map
+    this->RegGrid = this->CreatGridFromMap(RegImage, height, width,
+                                           config->getGridResolution(), config->getMapResolution(),
+                                           this->m_Cols, this->m_Rows);
+    
 }
 
 int Map::checkCellOccupation(std::vector<unsigned char> PngMap, int nRow, int nCol){
