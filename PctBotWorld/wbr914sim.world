@@ -28,7 +28,7 @@ gui_menu_interval 20
 window( 
   size [ 755.000 684.000 ] 
 #  size [ 500 500 ]
-#  center [-7.707 2.553] 
+  center [-7.707 2.553] 
   scale 0.009 
 )
 
@@ -42,7 +42,7 @@ window(
 map( 
   bitmap "roboticLabMap.png" 
   map_resolution 0.025
-  size [13.75 9.5] 
+  size [13.75 9.5]
   name "roboticLab"
 )
 
@@ -61,15 +61,13 @@ define puck model(
 #puck( pose [-9.045 0.624 -37.717 ] color "purple" )
 #puck( pose [-8.959 0.752 -461.643 ] color "orange" )
 
-
-
-
+puck( pose [-2.625 1.28 0 ] color "blue" )
 
 wbr914
 (
-  color "white"
+  color "red"
   name "wbr914_1"
-  pose [2.175 -2.875 45]
+  pose [2.2 -2.895 20]
 )
 
 #wbr914
@@ -78,5 +76,6 @@ wbr914
 #  name "wbr914_2"
 #  pose [-6.492 2.156 -199.781]
 #)
+
 
 
