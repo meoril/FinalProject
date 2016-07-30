@@ -107,7 +107,7 @@ std::list<Node*> PathPlanner::AStarPath (Point startPoint, Point goalPoint, Map 
     std::list<Node*> lstPath;
     
     while (nCurrnt->hasParent() && !nCurrnt->isEqual(nStart)){
-        lstPath.push_back(nCurrnt);
+        lstPath.push_front(nCurrnt);
         cout << nCurrnt->getX() << " " << nCurrnt->getY() << endl;
         nCurrnt = nCurrnt->getParent();
     }

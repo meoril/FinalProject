@@ -34,10 +34,6 @@ void Facade::Run()
     PathPlanner* pathPlanner = new PathPlanner();
     Point* tempStartPoint = new Point(myConfig->getStartPositionInGrid().getX(), myConfig->getStartPositionInGrid().getY());
     std::list<Node*> lstPath = pathPlanner->AStarPath(*tempStartPoint, myConfig->getGoalInGrid(), myMap);
-    this->printPath(lstPath,"before.png");
-    cout << lstPath.size() << endl;
-    lstPath = pathPlanner->AStarClearList(lstPath, myConfig->getGoalInGrid());
-    this->printPath(lstPath, "after.png");
     
     std::list<Node*> lstMapPath;
     
@@ -56,6 +52,8 @@ void Facade::Run()
     std::list<Node*> lstWayPoints;
     WaypointManager* mngWayPoint = new WaypointManager();
     mngWayPoint->createWayPoints(lstMapPath, &lstWayPoints);
+    
+    this->printPath(lstWayPoints, "after.png");
     Particle* best;
     
     for (std::list<Node*>::iterator listIterator = lstWayPoints.begin();
