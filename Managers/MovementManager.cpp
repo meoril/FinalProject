@@ -16,35 +16,40 @@ MovementManager::MovementManager(Robot* myinRobot) {
     myrobot->setOdometry(myrobot->robotStartPosition.getX(), myrobot->robotStartPosition.getY(), myrobot->robotStartPosition.getYaw());
 }
 
-int MovementManager::moveToNextWatPoint(int nXdest, int nYdest, LocalizationManager *locManager)
+int MovementManager::moveToNextWatPoint(Point *pDest, LocalizationManager *locManager)
 {
     myrobot->Read();
     
     Position psCurrnt = locManager->getCurrentPosition();
     
-    int nCurrX = psCurrnt.getX();
-    int nCurrY = psCurrnt.getY();
-    int nCurrYaw = psCurrnt.getYaw();
+    Position *pCurrPos = new Position(psCurrnt.getX(), psCurrnt.getY(), psCurrnt.getYaw());
+    //	int nCurrX = psCurrnt.getX();
+    //	int nCurrY = psCurrnt.getY();
+    //	int nCurrYaw = psCurrnt.getYaw();
     
-    int nRobCurrX = myrobot->getX();
-    int nRobCurrY = myrobot->getY();
-    int nRobCurrYaw = myrobot->getYaw();
+    //int nRobCurrX = myrobot->getX();
+    //int nRobCurrY = myrobot->getY();
+    //	nCurrX = myrobot->getX();
+    //	nCurrY = myrobot->getY();
+    //	int nRobCurrYaw = myrobot->getYaw();
+    pCurrPos = myrobot->getPosition();
     
-    // Debug prints
-    cout << "x: " << nCurrX << ", y: " << nCurrY << endl;
-    cout << "x rob: " << nRobCurrX << ", y rob: " << nRobCurrY << endl;
-    cout << BaseUtils::DegreeToRadian(BaseUtils::DegreeBetweenPoints(nCurrX, nCurrY, nXdest, nYdest))
-    << "  " << BaseUtils::DegreeToRadian(nCurrYaw) << endl;
-    cout << abs(BaseUtils::DegreeToRadian(BaseUtils::DegreeBetweenPoints(nCurrX, nCurrY, nXdest, nYdest))
-                - BaseUtils::DegreeToRadian(nCurrYaw)) <<  " "<< DEGREETOLERANCE <<endl;
+    double degreeBetweenThePoints = BaseUtils::DegreeToRadian(BaseUtils::DegreeBetweenPoints(pCurrPos->m_Pnt, *pDest));
+    double degreesDiff = degreeBetweenThePoints - BaseUtils::DegreeToRadian(pCurrPos->getYaw());
+    cout << "yaw diff between points: " << degreesDiff << endl;
     
+    cout << "curr robot yaw: " << pCurrPos->getYaw() << endl;
     // Turn to the right direcation
-    while (abs(BaseUtils::DegreeToRadian(BaseUtils::DegreeBetweenPoints(nCurrX, nCurrY, nXdest, nYdest))
-               - BaseUtils::DegreeToRadian(nCurrYaw)) > 0.15)
+    while (abs(degreesDiff) > 0.13)
     {
         myrobot->Read();
         
-        myrobot->setSpeed(0, 0.1);
+        if (degreesDiff > 0){
+            myrobot->setSpeed(0, 0.1);
+        }
+        else{
+            myrobot->setSpeed(0, -0.1);
+        }
         
         myrobot->Read();
         myrobot->Read();
@@ -52,20 +57,25 @@ int MovementManager::moveToNextWatPoint(int nXdest, int nYdest, LocalizationMana
         myrobot->Read();
         myrobot->Read();
         
-        cout << abs(BaseUtils::DegreeToRadian(BaseUtils::DegreeBetweenPoints(nCurrX, nCurrY, nXdest, nYdest))
-                    - BaseUtils::DegreeToRadian(nCurrYaw)) <<  " "<< DEGREETOLERANCE <<endl;
-        
-        //nCurrYaw = psCurrnt.getYaw();
-        nCurrYaw = myrobot->getYaw();
+        pCurrPos->setYaw(myrobot->getYaw());
+        degreesDiff = degreeBetweenThePoints - BaseUtils::DegreeToRadian(pCurrPos->getYaw());
+        cout << "curr yaw: " << BaseUtils::DegreeToRadian(pCurrPos->getYaw()) << endl;
+        cout << "curr degree diff: " << degreesDiff << endl;
+    }
+    
+    int currTolerance = TOLERANCE;
+    
+    cout << "Distance from end goal and this goal: " << pCurrPos->m_Pnt.getDistanceTo(&myrobot->robotGoal) << endl;
+    if (pDest->getDistanceTo(&myrobot->robotGoal) < 5){
+        currTolerance /= 3;
     }
     
     // Move fast
-    while (BaseUtils::Distance(nCurrX, nCurrY, nXdest, nYdest) > SLOWSPEEDRANGE)
+    while (pCurrPos->m_Pnt.getDistanceTo(pDest) > currTolerance * 1.5)
     {
         myrobot->Read();
         
-        //myrobot->setSpeed(LINEARSPEED, 0);
-        myrobot->setSpeed(1, 0);
+        myrobot->setSpeed(0.5, 0);
         
         myrobot->Read();
         myrobot->Read();
@@ -80,16 +90,16 @@ int MovementManager::moveToNextWatPoint(int nXdest, int nYdest, LocalizationMana
         //nCurrX = psCurrnt.getX();
         //nCurrY = psCurrnt.getY();
         
-        nCurrX = myrobot->getX();
-        nCurrY = myrobot->getY();
+        pCurrPos->setX(myrobot->getX());
+        pCurrPos->setY(myrobot->getY());
         
-        cout << "x: " << nCurrX << ", y: " << nCurrY << endl;
-        //cout << "x rob: " << nRobCurrX << ", y rob: " << nRobCurrY << endl;
-        cout << "Distance "<< BaseUtils::Distance(nCurrX, nCurrY, nXdest, nYdest) << SLOWSPEEDRANGE << endl;
+        cout << "destx: " << pDest->getX() << ", desty: " << pDest->getY() << endl;
+        cout << "currx: " << pCurrPos->getX() << ", curry: " << pCurrPos->getY() << endl;
+        cout << "distance: " << pCurrPos->m_Pnt.getDistanceTo(pDest) << endl;
     }
     
     // Move slow to get to the waypoint
-    while (BaseUtils::Distance(nCurrX, nCurrY, nXdest, nYdest) > TOLERANCE)
+    while (pCurrPos->m_Pnt.getDistanceTo(pDest) > currTolerance)
     {
         myrobot->setSpeed(LINEARSPEED * SLOWSPEEDRATIO, 0);
         
@@ -97,15 +107,16 @@ int MovementManager::moveToNextWatPoint(int nXdest, int nYdest, LocalizationMana
         {
             myrobot->Read();
         }
-        nCurrX = myrobot->getX();
-        nCurrY = myrobot->getY();
+        pCurrPos->setX(myrobot->getX());
+        pCurrPos->setY(myrobot->getY());
         
-        cout << "x: " << nCurrX << ", y: " << nCurrY << endl;
+        cout << "x: " << pCurrPos->getX() << ", y: " << pCurrPos->getY() << endl;
     }
     
     myrobot->setSpeed(0, 0);
     
-    return nCurrYaw;
+    cout << "got to waypoint: x-" << pDest->getX() << ", y-" << pDest->getY() << endl;
+    return pCurrPos->getYaw();
     
 }
 

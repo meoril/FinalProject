@@ -17,11 +17,11 @@ public:
     double m_Y;
     double getDistanceTo(Point *p);
     
-    inline unsigned getX() {
+    inline double getX() {
         return m_X;
     };
     
-    inline unsigned getY() {
+    inline double getY() {
         return m_Y;
     };
     

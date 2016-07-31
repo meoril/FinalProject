@@ -3,13 +3,14 @@
 #define PI 3.1415926536
 
 #include <cmath>
+#include "../Models/Point.h"
 
 
 class BaseUtils {
 public:
     BaseUtils();
     
-    enum CELL_STATUS {FREE = 0, BLOCK = 1, UNKNOWN = 2};
+    //enum CELL_STATUS {FREE = 0, BLOCK = 1, UNKNOWN = 2};
     static const double gridMapFinalResolution = 4;
     static const float DEGREES_INDEX_RATIO = 666 / 270;
     static const float MIDDLE_INDEX = 666 / 2;
@@ -27,8 +28,8 @@ public:
     
     static double DegreeToRadian(double degree);
     static double RadianToDegree(double radian);
-    static double DegreeBetweenPoints(double dFirstX, double dFirstY, double dSecondX, double dSecondY);
-    static double Distance(double x1, double y1, double x2, double y2);
+    static double DegreeBetweenPoints(Point firstPoint, Point secondPoint);
+    static double DegreeBetweenPoints(double dfirstX, double dfirstY, double dsecondX, double dsecondY);
     
     // Particles
     static const int PARTICLES_NUMBER = 150;
@@ -47,7 +48,6 @@ public:
     static const float LEFT_LASER_PROXY_VALUE = 614;
     
     // Behavior
-    static const float DISTANCE_TOLERANCE = 10;
     static const float MAX_LASER_INDEX = 665;
     
     // Others

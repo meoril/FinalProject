@@ -43,6 +43,7 @@ public:
     float getLaserScan(int index);
     void setOdometry();
     void setOdometry(int x, int y, double yaw);
+    Position* getPosition();
     double getX();
     double getY();
     double getMatrixX();

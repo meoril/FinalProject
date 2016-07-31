@@ -7,10 +7,9 @@
 
 class PathPlanner {
     
-    public:
+public:
     PathPlanner();
     std::list<Node*> AStarPath (Point startPoint, Point goalPoint, Map *map);
-    std::list<Node*> AStarClearList (std::list<Node*> lstAll, Point goalPoint);
     void isInList(Node *p, std::list<Node>& a);
     
     virtual ~PathPlanner();

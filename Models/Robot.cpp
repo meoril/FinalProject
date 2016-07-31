@@ -32,7 +32,8 @@ Robot::Robot(string strIP, int nPort, Position pStartPosition, Point pGoal, Size
     }
     
     // Init robot yaw and odometry
-    this->_positionProxy->SetOdometry(0,0,startYaw);
+    this->_positionProxy->SetOdometry(0, 0, startYaw);
+    this->_positionProxy->GetPlayerClient()->Read();
 }
 
 Robot::~Robot()
@@ -41,27 +42,6 @@ Robot::~Robot()
     delete _laserProxy;
     delete _playerClient;
 }
-
-
-
-/* void Robot::getObstacles(vector<Point>& obstacles) const
- {
-	_laser->getObstacles(LASER_OBSTACLE_DISTANCE, obstacles);
- }
- 
- bool Robot::canRotate() const
- {
-	return _laser->canRotate();
- }
- 
- bool Robot::canMoveForward() const
- {
-	return _laser->canMoveForward();
- }
- */
-
-
-
 
 void Robot::Read()
 {
@@ -72,13 +52,6 @@ void Robot::refresh()
 {
     // Refresh Sensors buffers
     _playerClient->Read();
-    
-    // Handle new Obstacles
-    // vector<Point> obstacles;
-    // getObstacles(obstacles);
-    
-    // map.handleObstacles(*this, obstacles);
-    // cout << map << endl;
 }
 
 void Robot::setSpeed(double speed, double angularSpeed)
@@ -104,6 +77,11 @@ void Robot::setOdometry(int x, int y, double yaw)
     double radianYaw = BaseUtils::DegreeToRadian(yaw);
     
     _positionProxy->SetOdometry(newX, newY,radianYaw);
+}
+
+Position* Robot::getPosition()
+{
+    return new Position(this->getX(), this->getY(), this->getYaw());
 }
 
 double Robot::getX()

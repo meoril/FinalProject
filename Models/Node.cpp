@@ -6,17 +6,17 @@
 using namespace std;
 Node::Node()
 {
-	parent = NULL;
+    parent = NULL;
     closed = false;
     opened = false;
-
+    
     x = y = f = g = h = 0;
 }
 
 Node::Node(int x, int y, bool w, Node *parent)
 {
-	Node();
-	this->parent = parent;
+    Node();
+    this->parent = parent;
     this->walkable = w;
     this->x = x;
     this->y = y;
@@ -24,7 +24,7 @@ Node::Node(int x, int y, bool w, Node *parent)
 
 Point* Node::getPoint()
 {
-    return new Point((float)(x * 64), (float)(y * 64));
+    return new Point(x, y);
 }
 
 Node* Node::getParent()
@@ -59,10 +59,10 @@ float Node::getYf()
 
 int Node::getGScore(Node *p)
 {
-	if (p->getX() != this->getX() && p->getY() != this->getY()){
-		return p->getGScore() + 14;
-	}
-
+    if (p->getX() != this->getX() && p->getY() != this->getY()){
+        return p->getGScore() + 14;
+    }
+    
     return p->getGScore() + 10;
 }
 
@@ -88,13 +88,13 @@ int Node::getFScore()
 
 void Node::computeScores(Node *end)
 {
-	if (this->parent != NULL){
-		g = this->getGScore(this->parent);
-	}
-	else{
-		g = 0;
-	}
-
+    if (this->parent != NULL){
+        g = this->getGScore(this->parent);
+    }
+    else{
+        g = 0;
+    }
+    
     h = getHScore(end);
     f = g + h;
 }
@@ -106,5 +106,5 @@ bool Node::hasParent()
 
 bool Node::isEqual(Node *comparedNode)
 {
-	return ((this->getX() == comparedNode->getX()) && (this->getY() == comparedNode->getY()));
+    return ((this->getX() == comparedNode->getX()) && (this->getY() == comparedNode->getY()));
 }

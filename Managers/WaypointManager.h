@@ -12,23 +12,23 @@
 #include "../Utils/BaseUtils.h"
 
 namespace Managers {
-
-class WaypointManager {
-public:
-	WaypointManager();
-	virtual ~WaypointManager();
-
-	bool isInWaypointRange(Node* nWaypoint);
-	// TODO: init nIsInRange in Facade
-	int nIsInRange;
-	int createWayPoints(std::list<Node*> lstinPath, std::list<Node*>* lstoutWayPoints);
-
-
-private:
-	Robot *robot;
-
-};
-
+    
+    class WaypointManager {
+    public:
+        WaypointManager();
+        virtual ~WaypointManager();
+        
+        bool isInWaypointRange(Node* nWaypoint);
+        // TODO: init nIsInRange in Facade
+        int nIsInRange;
+        int createWayPoints(std::list<Node*> lstinPath, std::list<Node*>* lstoutWayPoints);
+        
+        
+    private:
+        Robot *robot;
+        
+    };
+    
 } /* namespace Managers */
 
 #endif /* WAYPOINTMANAGER_H_ */

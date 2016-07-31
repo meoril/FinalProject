@@ -53,22 +53,21 @@ void Facade::Run()
     WaypointManager* mngWayPoint = new WaypointManager();
     mngWayPoint->createWayPoints(lstMapPath, &lstWayPoints);
     
-    this->printPath(lstWayPoints, "after.png");
+    this->printPath(lstWayPoints, "CleanPath.png");
     Particle* best;
     
     for (std::list<Node*>::iterator listIterator = lstWayPoints.begin();
          listIterator != lstWayPoints.end() ;listIterator++)
     {
         Node* nCurr = *listIterator;
-        int nCurrYaw = moveManager->moveToNextWatPoint(((Node*)*listIterator)->getX(),
-                                                       ((Node*)*listIterator)->getY(),
+        int nCurrYaw = moveManager->moveToNextWatPoint(nCurr->getPoint(),
                                                        locManager);
         
         best = locManager->getBestParticle();
         
-        locManager->update(best->getPosition().getX() - nCurr->getX(),
-                           best->getPosition().getY() - nCurr->getY(),
-                           best->getPosition().getYaw() - nCurrYaw);
+        //    		locManager->update(best->getPosition().getX() - nCurr->getX(),
+        //    						   best->getPosition().getY() - nCurr->getY(),
+        //    						   best->getPosition().getYaw() - nCurrYaw);
         
         
         cout << "Best particle: x - " << best->getPosition().getX() << "  y - " << best->getPosition().getX() << endl
@@ -100,8 +99,8 @@ void Facade::printPath(std::list<Node*>& lstStarPath, std::string name){
     // AStar
     for (std::list<Node*>::iterator listIterator = lstStarPath.begin(); listIterator != lstStarPath.end(); listIterator++)
     {
-        int nX = (*listIterator)->getX() * myConfig->getGridMapResolution();
-        int nY = (*listIterator)->getY() * myConfig->getGridMapResolution();
+        int nX = (*listIterator)->getX();// * myConfig->getGridMapResolution();
+        int nY = (*listIterator)->getY();// * myConfig->getGridMapResolution();
         int nPoint = (nX * 4 + nY * myMap->width * 4);
         myMap->FatImage[nPoint + 0] = 0;
         myMap->FatImage[nPoint + 1] = 255;//255

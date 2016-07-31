@@ -56,7 +56,7 @@ std::list<Node*> PathPlanner::AStarPath (Point startPoint, Point goalPoint, Map 
             {
                 // If its the current point - then pass
                 if (i == 0 && j == 0)
-                continue;
+                    continue;
                 
                 // If we are in a corner - then pass (we don't move in diagonal)
                 //if (i != 0 && j != 0)
@@ -108,47 +108,10 @@ std::list<Node*> PathPlanner::AStarPath (Point startPoint, Point goalPoint, Map 
     
     while (nCurrnt->hasParent() && !nCurrnt->isEqual(nStart)){
         lstPath.push_front(nCurrnt);
-        cout << nCurrnt->getX() << " " << nCurrnt->getY() << endl;
         nCurrnt = nCurrnt->getParent();
     }
     
     return lstPath;
-}
-
-std::list<Node*> PathPlanner::AStarClearList(std::list<Node*> lstAll, Point goalPoint)
-{
-    std::list<Node*> lstToRet;
-    std::list<Node*>::iterator curr = lstAll.begin();
-    Node* toComp = (Node*)(*curr);
-    Node* prev =  toComp;
-    int nCount = 0;
-    lstToRet.push_back(toComp);
-    curr++;
-    
-    double dCurrDiff;
-    double dAVGDiffSum = 0;
-    
-    while (!(((*curr)->getX() == goalPoint.getX()) && ((*curr)->getY() == goalPoint.getY())))
-    {
-        dCurrDiff = BaseUtils::DegreeBetweenPoints(toComp->getX(), toComp->getY(), (*curr)->getX(),(*curr)->getY());
-        dAVGDiffSum += dCurrDiff;
-        nCount++;
-        
-        if ((dCurrDiff + 2 < dAVGDiffSum / nCount) || (dAVGDiffSum / nCount < dCurrDiff - 2))
-        {
-            lstToRet.push_back(prev);
-            toComp = *curr;
-            nCount = 0;
-            dAVGDiffSum = 0;
-        }
-        
-        prev = *curr;
-        curr++;
-    }
-    
-    lstToRet.push_back(*curr);
-    
-    return (lstToRet);
 }
 
 PathPlanner::~PathPlanner() {
