@@ -36,6 +36,7 @@ void Facade::Run()
     std::list<Node*> lstPath = pathPlanner->AStarPath(*tempStartPoint, myConfig->getGoalInGrid(), myMap);
     
     std::list<Node*> lstMapPath;
+    std::list<Node*> lstRealLoc;
     
     for (std::list<Node*>::iterator listIterator = lstPath.begin();
          listIterator != lstPath.end(); listIterator++)
@@ -73,7 +74,10 @@ void Facade::Run()
         cout << "Best particle: x - " << best->getPosition().getX() << "  y - " << best->getPosition().getX() << endl
     			 << "Current position: x - " << myRobot->getX() << " y - " << myRobot->getY() << endl << endl;
         
+        lstRealLoc.push_back(new Node(myRobot->getX(), myRobot->getY(), true, NULL));
     }
+
+    this->printPath(lstRealLoc, "RealLoc.png");
 }
 
 void Facade::printPath(std::list<Node*>& lstStarPath, std::string name){
