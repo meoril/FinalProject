@@ -27,6 +27,7 @@ private:
     static const double DEGREETOLERANCE = 1;
     static const double YAWSPEED = 0.02;
 
+	void turnAround(Position& pCurrPos, LocalizationManager* locManager, Point *pDest);
 };
 
 

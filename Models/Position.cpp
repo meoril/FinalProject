@@ -8,27 +8,27 @@
 #include "Position.h"
 
 Position::Position()
-:m_Pnt()
+	:m_Pnt()
 {
-    m_Yaw = 0;
+	m_Yaw = 0;
 }
 
 Position::Position(double x, double y, double yaw)
-:m_Pnt(x,y)
+	:m_Pnt(x,y)
 {
-    m_Yaw = yaw;
+	m_Yaw = yaw;
 }
 
 void Position::setX(double x){
-    this->m_Pnt.m_X = x;
+	this->m_Pnt.m_X = x;
 }
 
 void Position::setY(double y){
-    this->m_Pnt.m_Y = y;
+	this->m_Pnt.m_Y = y;
 }
 
 void Position::setYaw(double yaw){
-    this->m_Yaw = yaw;
+	this->m_Yaw = yaw;
 }
 
 Position::~Position() {

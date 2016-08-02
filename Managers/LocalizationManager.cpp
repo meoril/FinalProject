@@ -16,6 +16,7 @@ LocalizationManager::LocalizationManager(Map* map, LaserProxy* laser, Position* 
 
 	// Creating first particle
 	this->_particles.push_back(new Particle(start->getX(),start->getY(),start->getYaw()));
+	this->update(0,0,0);
 }
 
 void LocalizationManager::BreedParticle(Particle* particle, int numToBreed, vector<Particle*>*  children){
@@ -25,7 +26,7 @@ void LocalizationManager::BreedParticle(Particle* particle, int numToBreed, vect
 
 	// Creating particles
 	for (int i = 0; i<numToCreate; i++) {
-		children->push_back(particle->CreateChild(10,1));
+		children->push_back(particle->CreateChild(3,0.0001));
 	}
 }
 
@@ -46,10 +47,10 @@ void LocalizationManager::update(double deltaX, double deltaY, double deltaYaw){
 
 		}
 		else if (belief >= BaseUtils::GOOD_BELIEF_THRESHOLD){
-			BreedParticle(particle, GOOD_BREED , &toAdd);
+			BreedParticle(particle, GOOD_BREED+15 , &toAdd);
 		}
 		else {
-			BreedParticle(particle,NORMAL_BREED, &toAdd);
+			BreedParticle(particle,NORMAL_BREED+5, &toAdd);
 		}
 	}
 
@@ -71,6 +72,7 @@ Particle* LocalizationManager::getBestParticle(){
 
 	// Looking for highest belief
 	for (unsigned index=1;index<this->_particles.size();index++){
+		//cout << this->_particles[index]->getPosition().getX() << " " << _particles[index]->getPosition().getY() <<endl;
 		if(this->_particles[index]->m_belief > bestParticle->m_belief){
 			bestParticle = _particles[index];
 		}
@@ -79,7 +81,8 @@ Particle* LocalizationManager::getBestParticle(){
 }
 
 Position LocalizationManager::getCurrentPosition(){
-	return this->getBestParticle()->getPosition();
+	Position ret = this->getBestParticle()->getPosition();
+	return ret;
 }
 
 LocalizationManager::~LocalizationManager(){

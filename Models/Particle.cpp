@@ -19,20 +19,33 @@ float probabilityByMovement(double x, double y)
 
 	float distance = sqrt(pow((double)x,2) + pow((double)y,2));
 
-	if (distance < 1)
-		return 1;
-
-	if (distance < 3)
-		return 0.9;
 
 	if (distance < 5)
+		return 1;
+
+	if (distance < 15)
+		return 0.92;
+
+	if(distance < 25)
+		return 0.85;
+
+	if (distance < 30)
+		return 0.83;
+
+	if (distance < 40)
+		return 0.80;
+
+	if (distance < 47)
+		return 0.75;
+
+	if (distance < 65)
 		return 0.7;
 
-	if (distance < 7)
-		return 0.5;
+	if (distance < 80)
+		return 0.2;
 
-	if (distance < 9)
-		return 0.3;
+	if (distance < 110)
+		return 0.4;
 
 	return 0.1;
 }
@@ -78,6 +91,7 @@ float probabilityByLaserScan(Position* pos, const Map* map, const LaserProxy* la
 			float obstacleX = pos->getX() + rangeInPixels * cos(yawInRadians + bearing);
 			float obstacleY = pos->getY() - rangeInPixels * sin(yawInRadians + bearing);
 
+
 			// Check if we missed boundaries.
 			if ((obstacleX) < 0 || (obstacleX) >= map->width -10 ||
 					obstacleY < 0 || (obstacleY) >= map->height -10)
@@ -85,7 +99,7 @@ float probabilityByLaserScan(Position* pos, const Map* map, const LaserProxy* la
 				boundaryMisses++;
 			}
 			// Check if there's a hit on an obstacle.
-			else if (map->RegGrid[floor(obstacleY)][floor(obstacleX)] == 1)
+			else if (map->RegGrid[floor(obstacleX / 4)][floor(obstacleY / 4)] == 1)
 			{
 				correctHits++;
 			}
@@ -93,8 +107,8 @@ float probabilityByLaserScan(Position* pos, const Map* map, const LaserProxy* la
 	}
 
 	float accuracy = correctHits / totalHits;
-
-	return accuracy;
+	//cout << "Acc " << accuracy << endl;
+	return std::max((float)accuracy,(float)0.001);
 }
 
 float Random(float min, float max)
@@ -126,12 +140,19 @@ float Particle::getBelief(){
 			this->m_belief = 0;
 		}
 		else {
+
 			// Calculating probability
 			this->m_belief = std::min(probabilityByLaserScan(&this->m_pos, map, laser) *
-									probabilityByMovement(deltaX,deltaY) * 1.2,(double)1);
-
+									 probabilityByMovement(deltaX,deltaY) * 12.2,(double)1);
+			//this->m_belief = std::min(this->m_belief*( probabilityByLaserScan(&this->m_pos, map, laser) *
+							//					 probabilityByMovement(deltaX,deltaY) * 12.2),(double)1);
+			//cout << this->m_belief <<endl;
+			if (this->m_belief == 1){
+			//	cout << "Zivos" <<endl;
+			}
+			//cout << "Curr particle: " << this->m_belief << ", " << this->m_pos.getX()<< " " << this->m_pos.getY() << endl;
 		}
-
+		//cout << "Curr particle: " << this->m_belief << ", " << this->m_pos.getX()<< " " << this->m_pos.getY() << endl;
 	}
 
 Particle* Particle::CreateChild(const int expansionRadius, const int yawRange)
@@ -139,7 +160,7 @@ Particle* Particle::CreateChild(const int expansionRadius, const int yawRange)
 	   float newX = this->m_pos.getX() + Random(-expansionRadius, expansionRadius);
 	    float newY = this->m_pos.getY() + Random(-expansionRadius, expansionRadius);
 	    float newYaw = this->m_pos.getYaw() + Random(-yawRange, yawRange);
-	    return new Particle(newX, newY, newYaw);
+	    return new Particle(newX, newY, m_pos.getYaw());
 }
 
 Position Particle::getPosition(){

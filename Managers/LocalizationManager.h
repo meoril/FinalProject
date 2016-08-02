@@ -36,8 +36,8 @@ public:
 	Position getCurrentPosition();
 
 	static const float MAGIC_NUM = 1.2;
-	static const int GOOD_BREED = 10;
-	static const int NORMAL_BREED = 3;
+	static const int GOOD_BREED = 16;
+	static const int NORMAL_BREED = 5;
 
 private:
 	void BreedParticle(Particle* particle, int numToBreed, vector<Particle*>*  children);

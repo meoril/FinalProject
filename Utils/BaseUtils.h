@@ -30,12 +30,12 @@ public:
     static double RadianToDegree(double radian);
     static double DegreeBetweenPoints(Point firstPoint, Point secondPoint);
     static double DegreeBetweenPoints(double dfirstX, double dfirstY, double dsecondX, double dsecondY);
-    
+
     // Particles
-    static const int PARTICLES_NUMBER = 150;
+    static const int PARTICLES_NUMBER = 250;
     static const double MIN_BELIEF_THRESHOLD = 0.2;
     static const double GOOD_BELIEF_THRESHOLD = 0.7;
-    
+    static const double BEST_BELIEF_THRESHOLD = 0.9;
     // Probability
     static const double PERFECT_PROB = 0.99;
     static const double HIGH_PROB = 0.9;

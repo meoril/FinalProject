@@ -10,11 +10,11 @@
 
 class Size {
 public:
-    Size();
-    Size(float height, float width);
-    virtual ~Size();
-    float m_Height;
-    float m_Width;
-    float RadiosSize();
+	Size();
+	Size(float height, float width);
+	virtual ~Size();
+	float m_Height;
+	float m_Width;
+	float RadiosSize();
 };
 #endif
